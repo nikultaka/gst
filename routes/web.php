@@ -15,7 +15,25 @@ Route::get('/', function() {
 //    return redirect('/dashboard');
     return view('Admin.login');
 });
+//Registration Form Start
+Route::get('/signup', function() {
+    return view('Admin.register');
+});
+Route::post('/signup/save', 'Admin\AdminController@signup')->name('/signup/save');
+Route::post('/signup/validataion', 'Admin\AdminController@validation');
+//Registration form End
 
+//Forgot email or password
+Route::get('/forgot', function() {
+    return view('Admin.forgot');
+});
+Route::post('/forgot/verify', 'Admin\AdminController@forgot');
+Route::get('/forgot/change_password/{code}', 'Admin\AdminController@change_password');
+Route::get('/forgot/change_password',function(){
+    return view('Admin.change_password');
+});
+Route::post('/forgot/change', 'Admin\AdminController@change');
+//
 Route::get('/login', function() {
     return view('Admin.login');
 });
