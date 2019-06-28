@@ -57,12 +57,12 @@ Route::post('/savesession', 'Admin\DashboardController@save_session');
 
 //     User Routes Start
 //    Route::post('/email_check', 'Admin\UserController@email_check');
-//    Route::get('/user', 'Admin\UserController@index');
-//    Route::post('/user/add', 'Admin\UserController@add');
-//    Route::post('/user/edit', 'Admin\UserController@edit');
-//    Route::post('/user/update', 'Admin\UserController@update');
-//    Route::post('/user/delete', 'Admin\UserController@delete');
-//    Route::post('/user/gettable', 'Admin\UserController@user_data_table');
+    Route::get('/clients', 'Admin\ClientController@index');
+    Route::post('/clients/add', 'Admin\ClientController@add');
+    Route::post('/clients/edit', 'Admin\ClientController@edit');
+    Route::post('/clients/update', 'Admin\ClientController@update');
+    Route::post('/clients/delete', 'Admin\ClientController@delete');
+    Route::post('/clients/gettable', 'Admin\ClientController@client_data_table');
 //     User Routes End
 
 
