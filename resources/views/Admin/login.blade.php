@@ -6,27 +6,37 @@
     {{ csrf_field() }}
     <div class="form-group has-feedback">
       <!--<input type="email" class="form-control">-->
-    <input id="email" type="email" placeholder="Email Address" class="form-control" name="email" value="{{ old('email') }}"  placeholder="Email" required="required">
-      <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <input id="email" type="email" placeholder="Email Address" class="form-control" name="email" value="{{ old('email') }}"  placeholder="Email" required="required">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
     </div>
     <div class="form-group has-feedback">
       <!--<input type="password" class="form-control" >-->
-      <input id="password" type="password" placeholder="Password" class="form-control" name="password" placeholder="Password" required="required">
-      <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <input id="password" type="password" placeholder="Password" class="form-control" name="password" placeholder="Password" required="required">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
     </div>
     <div class="row">
-<!--      <div class="col-xs-8">
-        <div class="checkbox icheck">
-          <label>
-            <input type="checkbox"> Remember Me
-          </label>
+        <div class="col-xs-8">
+            <div class="checkbox icheck">
+                <label>
+                    <a href="<?php echo url('/'); ?>/signup" class="text-center">Register a new membership</a>
+                </label>
+                <label>
+                    <a href="<?php echo url('/'); ?>/forgot" class="text-center">Forgot Password</a>
+                </label>
+            </div>
         </div>
-      </div>-->
-      <!-- /.col -->
-      <div class="col-xs-12">
-        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-      </div>
-      <!-- /.col -->
+        <!--      <div class="col-xs-8">
+                <div class="checkbox icheck">
+                  <label>
+                    <input type="checkbox"> Remember Me
+                  </label>
+                </div>
+              </div>-->
+        <!-- /.col -->
+        <div class="col-xs-12">
+            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+        </div>
+        <!-- /.col -->
     </div>
 </form>
 
