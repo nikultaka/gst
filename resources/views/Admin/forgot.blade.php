@@ -4,17 +4,15 @@
 <form id="forgot_form"  name="forgot_form" action="" method="post" onsubmit="return false;" >
     {{ csrf_field() }}
     <div class="form-group has-feedback">
-        <input type="text" name="email" id="email" class="form-control" data-validation="email" required="required" placeholder="E-Mail id">
+        <input type="text" name="email" id="email" class="form-control" data-validation="required,email" placeholder="Email">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
     </div>
+    <p id="msg"></p>
     <div class="row">
         <div class="col-xs-8">
             <div class="checkbox icheck">
                 <label>
-                    <a href="<?php echo url('/'); ?>/login" class="text-center">I already have a membership</a>
-                </label>
-                <label>
-                    <a href="<?php echo url('/'); ?>/signup" class="text-center">Register a new membership</a>
+                    <a href="{{ url('/login') }}" class="text-center">Remember password ? Log in here.</a>
                 </label>
             </div>
         </div>
@@ -22,7 +20,7 @@
             <button type="submit" id="submit" name="submit" class="btn btn-primary btn-block btn-flat">Verify</button>
         </div>
     </div>
-    <p id="msg"></p>
+
 </form>
 @endsection
 @section('bottomscript')
@@ -34,41 +32,21 @@
             onSuccess: function ($form) {
                 var email = $('#email').val();
                 $.ajax({
-                    url: '<?php echo url('/'); ?>/forgot/verify',
+                    url: '<?php echo url('/forgot/verify'); ?>',
                     method: 'post',
-                    data: {
-                        'email': email,
-                        "_token": "{{ csrf_token() }}",
-                    },
-                    success: function (data) {
-                        window.location.href = '<?php echo url('/'); ?>/dashboard';
-                    }
-                });
-            },
-            onValidate: function ($form) {
-                var email = $('#email').val();
-                var obj = {};
-                $.ajax({
-                    url: '<?php echo url('/'); ?>/signup/validataion',
-                    method: 'post',
-                    async: false,
-                    data: {
-                        'email': email,
-                        "_token": "{{ csrf_token() }}",
-                    },
-                    success: function (data) {
-                        var result = JSON.parse(data);
-                        if (result.status == 1) {
-                            obj.element = $('#email');
-                            obj.message = 'Email dose not exist.';
-                        }
-                        else{
-                            $("#msg").html(result.msg);
-//                            obj.message = 'We have sent a verification link please click for change your password';
+                    data: $("#forgot_form").serialize(),
+                    success: function (result) {
+                        var data = JSON.parse(result);
+                        if (data.status == 1) {
+                            $("#forgot_form")[0].reset();
+                            $("#msg").css('color', 'green');
+                            $("#msg").html(data.msg);
+                        } else {
+                            $("#msg").css('color', 'red');
+                            $("#msg").html(data.msg);
                         }
                     }
                 });
-                return obj;
             },
         });
     });

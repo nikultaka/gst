@@ -38,6 +38,22 @@ License: You must have a valid license purchased only from themeforest(the above
                 }
             });
         </script>
+        <style>
+            .loader {
+                display: none;
+                background-color: rgba(255,255,255,0.3);
+                position: absolute;
+                z-index: 1000 !important;
+                width: 100%;
+                height:100%;
+            }
+
+            .loader img {
+                position: relative;
+                top:50%;
+                left:50%;
+            }
+        </style>
         <script type="text/javascript">
             var admin = {};
             var BASE_URL = "{{ url('/') }}";
@@ -107,6 +123,9 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <!-- begin::Body -->
     <body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--fixed kt-subheader--enabled kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading">
+        <div class="loader">
+            <img src="{{asset(ASSET.'upload/loader.gif')}}">
+        </div>
 
         <input type="hidden" value="{{ csrf_token() }}" name='csrf-token' id='csrf-token'>
         <!-- begin:: Page -->
@@ -144,18 +163,18 @@ License: You must have a valid license purchased only from themeforest(the above
                         <!-- begin:: Content Head -->
                         <div class="kt-subheader   kt-grid__item" id="kt_subheader">
                             <div class="kt-subheader__main" style="width: 100%;">
-<!--                                <h3 class="kt-subheader__title">Dashboard</h3>
-                                <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-                                <span class="kt-subheader__desc">#XRS-45670</span>
-                                <a href="#" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
-                                    Add New
-                                </a>
-                                <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
-                                    <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
-                                    <span class="kt-input-icon__icon kt-input-icon__icon--right">
-                                        <span><i class="flaticon2-search-1"></i></span>
-                                    </span>
-                                </div>-->
+                                <!--                                <h3 class="kt-subheader__title">Dashboard</h3>
+                                                                <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+                                                                <span class="kt-subheader__desc">#XRS-45670</span>
+                                                                <a href="#" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+                                                                    Add New
+                                                                </a>
+                                                                <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+                                                                    <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+                                                                    <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                                                                        <span><i class="flaticon2-search-1"></i></span>
+                                                                    </span>
+                                                                </div>-->
 
                                 <div class="row" style="width: 100%;"> 
                                     <div class="col-sm-3">
@@ -211,9 +230,9 @@ License: You must have a valid license purchased only from themeforest(the above
                             <!--2019&nbsp;&copy;&nbsp;<a href="http://keenthemes.com/metronic" target="_blank" class="kt-link">Keenthemes</a>-->
                         </div>
                         <div class="kt-footer__menu">
-<!--                            <a href="http://keenthemes.com/metronic" target="_blank" class="kt-footer__menu-link kt-link">About</a>
-                            <a href="http://keenthemes.com/metronic" target="_blank" class="kt-footer__menu-link kt-link">Team</a>
-                            <a href="http://keenthemes.com/metronic" target="_blank" class="kt-footer__menu-link kt-link">Contact</a>-->
+                            <!--                            <a href="http://keenthemes.com/metronic" target="_blank" class="kt-footer__menu-link kt-link">About</a>
+                                                        <a href="http://keenthemes.com/metronic" target="_blank" class="kt-footer__menu-link kt-link">Team</a>
+                                                        <a href="http://keenthemes.com/metronic" target="_blank" class="kt-footer__menu-link kt-link">Contact</a>-->
                         </div>
                     </div>
 
@@ -346,6 +365,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <script type="text/javascript">
             $(document).ready(function () {
                 admin.common.initialize();
+                admin.dashboard.initialize();
                 admin.dashboard.initialize();
             });
         </script>

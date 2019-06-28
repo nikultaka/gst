@@ -27,71 +27,130 @@ class AdminController extends Controller {
     }
 
     public function signup(Request $request) {
-        $user_data = ([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
-            'role_id' => 1,
-            'status' => 1,
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
 
-        DB::table('users')->insert($user_data);
-        $data['status'] = 1;
-        $data['console'] = $user_data['name'];
+        $post = $request->post();
+        $data = array();
+
+        if (!empty($post)) {
+
+            $user_data = ([
+                'name' => $post['name'],
+                'email' => $post['email'],
+                'password' => Hash::make($post['password']),
+                'role_id' => 1,
+                'status' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+
+            $insert = DB::table('users')->insert($user_data);
+
+            if ($insert) {
+                $data['status'] = 1;
+                $data['msg'] = "Register successfully.";
+            } else {
+                $data['status'] = 0;
+                $data['msg'] = "Something went wrong try again.";
+            }
+        }
         echo json_encode($data);
         exit;
     }
 
     public function validation(Request $request) {
-        $email = $request->post();
-        $result = DB::table('users')->where('email', $email)->first();
-        if (!empty($result)) {
-            $data['status'] = 0;
-            $data['msg'] = 'We have sent a verification link please click for change your password';
-        } else {
-            $data['status'] = 1;
-            $data['msg'] = 'Email dose not exist';
+
+        $post = $request->post();
+        $data = array();
+        $data['status'] = 0;
+
+        if (!empty($post)) {
+
+            $email = $post['email'];
+            $result = DB::table('users')->where('email', $email)->where('role_id', 1)->first();
+
+            if (!empty($result)) {
+                $data['status'] = 1;
+                $data['msg'] = 'Email already registered.';
+            } else {
+                $data['status'] = 0;
+                $data['msg'] = 'Email dose not exist';
+            }
         }
         echo json_encode($data);
         exit;
     }
 
     public function forgot(Request $request) {
-        $array = $request->post();
-        $email = $array['email'];
-        $data['email'] = $email;
-        $result = DB::table('users')->where('email', $email)->first();
-        $set = $result->id;
-        $code = array('code' => base64_encode($set));
-        Mail::send('admin.mail', $code, function($message) use ($data) {
-            $message->to($data['email'], 'Forgot Password')->subject
-                    ('Verification mail to change password');
-            $message->from(USER_EMAIL, USER_NAME);
-        });
-        echo "HTML Email Sent. Check your inbox.";
+        $post = $request->post();
+
+        $result = array();
+
+        if (!empty($post)) {
+
+            $email = $post['email'];
+            $user = DB::table('users')->where('email', $email)->where('role_id', 1)->first();
+
+            if (!empty($user)) {
+
+                $id = $user->id;
+                $data = array();
+                $data['id'] = base64_encode($id);
+                $data['email'] = $user->email;
+                $data['name'] = $user->name;
+                $data['link'] = url('/forgot/change_password/' . $data['id']);
+
+                Mail::send('admin.mail', $data, function($message) use ($data) {
+                    $message->to($data['email'], 'Forgot Password')->subject
+                            ('Reset password');
+                    $message->from(USER_EMAIL, USER_NAME);
+                });
+
+                $result['status'] = 1;
+                $result['msg'] = "We send you a link to reset password.";
+            } else {
+                $result['status'] = 0;
+                $result['msg'] = "Email not exist.";
+            }
+        }
+
+        echo json_encode($result);
+        exit;
     }
 
-    public function change_password($code) {
-        $code = request()->segment(3);
-        $id = base64_decode($code);
-        $result = DB::table('users')->where('id', $id)->first();
-        $data['user'] = $result;
-        if (!empty($result)) {
+    public function change_password($id) {
+
+        if ($id != '') {
+            $id_decode = base64_decode($id);
+            $data['id'] = $id_decode;
+
             return view('admin.change_password')->with($data);
-        } else {
-            echo "Code dose not match";
-            exit;
         }
     }
 
     public function change(Request $request) {
-        $array = $request->post();
-        $password = Hash::make($array['password']);
+        $post = $request->post();
+        $result = array();
+        $result['status'] = 0;
 
-        DB::table('users')
-                ->where('id', $array['id'])
-                ->update(['password' => $password]);
+        if (!empty($post)) {
+
+            $password = Hash::make($post['password']);
+
+            $pass_update = DB::table('users')
+                    ->where('id', $post['id'])
+                    ->where('role_id', 1)
+                    ->update(['password' => $password]);
+
+            if ($pass_update) {
+                $result['status'] = 1;
+                $result['msg'] = 'Password changed. click <a href="'.url('login').'" style="color:black;">here</a> for login';
+            } else {
+                $result['status'] = 0;
+                $result['msg'] = 'Something went wrong.';
+            }
+        }
+
+        echo json_encode($result);
+        exit;
     }
 
 }

@@ -15,13 +15,13 @@
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
     </div>
     <div class="row">
-        <div class="col-xs-8">
+        <div class="col-xs-12">
             <div class="checkbox icheck">
                 <label>
-                    <a href="<?php echo url('/'); ?>/signup" class="text-center">Register a new membership</a>
+                    <a href="{{ url('/signup') }}" class="text-center">Dont't have an account! Register here.</a>
                 </label>
                 <label>
-                    <a href="<?php echo url('/'); ?>/forgot" class="text-center">Forgot Password</a>
+                    <a href="{{ url('/forgot') }}" class="text-center">Forgot Password ?</a>
                 </label>
             </div>
         </div>

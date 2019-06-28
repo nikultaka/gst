@@ -66,6 +66,8 @@ admin.dashboard = {
             $("#month_quarter").append($("<option selected='selected'></option>").val('').text('')).trigger('change');
             admin.table.load_reporting_table();
             admin.table.load_reporting_sales_table();
+            admin.table.load_sales_table();
+            admin.table.load_sales_return_table();
         });
 
         $("#financial_year").on('select2:select', function (e) {
@@ -85,6 +87,8 @@ admin.dashboard = {
             $("#success_msg").html('');
             admin.table.load_reporting_table();
             admin.table.load_reporting_sales_table();
+            admin.table.load_sales_table();
+            admin.table.load_sales_return_table();
         });
 
         $("#month_quarter").on('select2:select', function (e) {
@@ -93,6 +97,8 @@ admin.dashboard = {
             sessionStorage.setItem("month_quarter_text", $(this).find('option:selected').text());
             admin.table.load_reporting_table();
             admin.table.load_reporting_sales_table();
+            admin.table.load_sales_table();
+            admin.table.load_sales_return_table();
         });
 
         $("#select_type").on('select2:select', function (e) {
@@ -101,6 +107,8 @@ admin.dashboard = {
             sessionStorage.setItem("select_type_text", $(this).find('option:selected').text());
             admin.table.load_reporting_table();
             admin.table.load_reporting_sales_table();
+            admin.table.load_sales_table();
+            admin.table.load_sales_return_table();
         });
 
         $(".select_dropdown").on('select2:select', function (e) {

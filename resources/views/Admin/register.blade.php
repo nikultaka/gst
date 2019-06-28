@@ -9,25 +9,23 @@
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
     </div>
     <div class="form-group has-feedback">
-        <input type="text" name="email" id="email" class="form-control" data-validation="required" placeholder="E-Mail id" data-validation-url="/validateinput.php">
+        <input type="text" name="email" id="email" class="form-control" data-validation="required,email" placeholder="Email">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
     </div>
     <div class="form-group has-feedback">
-        <input type="password" name="password_confirmation" id="password" data-validation="length" data-validation-length="min3" class="form-control" placeholder="Password">
+        <input type="password" name="password_confirmation" id="password" data-validation="length" data-validation-length="min6" class="form-control" placeholder="Password">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
     </div>
     <div class="form-group has-feedback">
-        <input type="password" name="password" id="repassword" data-validation="confirmation" class="form-control" placeholder="Retype password">
+        <input type="password" name="password" id="repassword" data-validation="confirmation" class="form-control" placeholder="Confirm password">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
     </div>
+    <p id="msg"></p>
     <div class="row">
-        <div class="col-xs-8">
+        <div class="col-xs-12">
             <div class="checkbox icheck">
                 <label>
-                    <a href="<?php echo url('/'); ?>/login" class="text-center">I already have a membership</a>
-                </label>
-                <label>
-                    <a href="<?php echo url('/'); ?>/forgot" class="text-center">Forgot Password</a>
+                    <a href="{{ url('/login') }}" class="text-center">Already have an account Log in here.</a>
                 </label>
             </div>
         </div>
@@ -35,7 +33,7 @@
             <button type="submit" id="submit" name="submit" class="btn btn-primary btn-block btn-flat">Register</button>
         </div>
     </div>
-    <p id="msg"></p>
+    
 </form>
 @endsection
 @section('bottomscript')
@@ -47,13 +45,20 @@
             onSuccess: function ($form) {
                 var fdata = new FormData($("#user_form")[0]);
                 $.ajax({
-                    url: '<?php echo url('/'); ?>/signup/save',
+                    url: '<?php echo url('/signup/save'); ?>',
                     method: 'post',
-                    data: fdata,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        window.location.href = '<?php echo url('/'); ?>/dashboard';
+                    data: $('#user_form').serialize(),
+                    success: function (result) {
+                        
+                        var data = JSON.parse(result);
+                        if(data.status == 1){
+                            $("#user_form")[0].reset();
+                            $("#msg").css('color','green');
+                            $("#msg").html(data.msg);
+                        } else {
+                            $("#msg").css('color','red');
+                            $("#msg").html(data.msg);
+                        }
                     }
                 });
             },
@@ -61,7 +66,7 @@
                 var email = $('#email').val();
                 var obj = {};
                 $.ajax({
-                    url: '<?php echo url('/'); ?>/signup/validataion',
+                    url: '<?php echo url('/signup/validataion'); ?>',
                     method: 'post',
                     async: false,
                     data: {
@@ -70,9 +75,9 @@
                     },
                     success: function (data) {
                         var result = JSON.parse(data);
-                        if (result.status == 0) {
+                        if (result.status == 1) {
                             obj.element = $('#email');
-                            obj.message = 'Email already exist.';
+                            obj.message = result.msg;
                         }
                     }
                 });

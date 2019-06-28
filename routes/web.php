@@ -28,7 +28,7 @@ Route::get('/forgot', function() {
     return view('Admin.forgot');
 });
 Route::post('/forgot/verify', 'Admin\AdminController@forgot');
-Route::get('/forgot/change_password/{code}', 'Admin\AdminController@change_password');
+Route::get('/forgot/change_password/{id}', 'Admin\AdminController@change_password');
 Route::get('/forgot/change_password',function(){
     return view('Admin.change_password');
 });
