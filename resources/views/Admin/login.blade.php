@@ -1,4 +1,6 @@
 @extends('Admin.layouts.login.main')
+@section('pageTitle','Login')
+@section('pageHeadTitle','Sign in to start your session')
 
 @section('content')
 

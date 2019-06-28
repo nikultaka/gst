@@ -1,4 +1,6 @@
 @extends('Admin.layouts.login.main')
+@section('pageTitle','Register')
+@section('pageHeadTitle','Register here')
 
 @section('content')
 <form id="user_form"  name="user_form" action="" method="post" onsubmit="return false;" >

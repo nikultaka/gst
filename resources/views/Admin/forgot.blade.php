@@ -1,4 +1,6 @@
 @extends('Admin.layouts.login.main')
+@section('pageTitle','Forgot password')
+@section('pageHeadTitle','Forgot Password ?')
 
 @section('content')
 <form id="forgot_form"  name="forgot_form" action="" method="post" onsubmit="return false;" >

@@ -1,4 +1,6 @@
 @extends('Admin.layouts.login.main')
+@section('pageTitle','Change Password')
+@section('pageHeadTitle','Change Password')
 
 @section('content')
 <form id="change_form"  name="change_form" action="" method="post" onsubmit="return false;" >
