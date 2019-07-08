@@ -62,12 +62,20 @@ admin.dashboard = {
             admin.dashboard.save_session();
             sessionStorage.setItem("client_id", $(this).val());
             sessionStorage.setItem("client_text", $(this).find('option:selected').text());
+            
             $("#financial_year").append($("<option selected='selected'></option>").val('').text('')).trigger('change');
             $("#month_quarter").append($("<option selected='selected'></option>").val('').text('')).trigger('change');
-            admin.table.load_reporting_table();
-            admin.table.load_reporting_sales_table();
+            
+            sessionStorage.setItem("financial_year_id", '');
+            sessionStorage.setItem("financial_year_text", '');
+            
+            sessionStorage.setItem("month_quarter_id", '');
+            sessionStorage.setItem("month_quarter_text", '');
+            
             admin.table.load_sales_table();
             admin.table.load_sales_return_table();
+            admin.table.load_reporting_table();
+//            admin.table.load_reporting_sales_table();
         });
 
         $("#financial_year").on('select2:select', function (e) {
@@ -85,30 +93,30 @@ admin.dashboard = {
             $('.error_div').hide();
             $("#msg").html('');
             $("#success_msg").html('');
-            admin.table.load_reporting_table();
-            admin.table.load_reporting_sales_table();
             admin.table.load_sales_table();
             admin.table.load_sales_return_table();
+            admin.table.load_reporting_table();
+//            admin.table.load_reporting_sales_table();
         });
 
         $("#month_quarter").on('select2:select', function (e) {
             admin.dashboard.save_session();
             sessionStorage.setItem("month_quarter_id", $(this).val());
             sessionStorage.setItem("month_quarter_text", $(this).find('option:selected').text());
-            admin.table.load_reporting_table();
-            admin.table.load_reporting_sales_table();
             admin.table.load_sales_table();
             admin.table.load_sales_return_table();
+            admin.table.load_reporting_table();
+//            admin.table.load_reporting_sales_table();
         });
 
         $("#select_type").on('select2:select', function (e) {
             admin.dashboard.save_session();
             sessionStorage.setItem("select_type_id", $(this).val());
             sessionStorage.setItem("select_type_text", $(this).find('option:selected').text());
-            admin.table.load_reporting_table();
-            admin.table.load_reporting_sales_table();
             admin.table.load_sales_table();
             admin.table.load_sales_return_table();
+            admin.table.load_reporting_table();
+//            admin.table.load_reporting_sales_table();
         });
 
         $(".select_dropdown").on('select2:select', function (e) {
@@ -157,6 +165,7 @@ admin.dashboard = {
         $.ajax({
             url: BASE_URL + '/savesession',
             type: 'POST',
+            async: false,
             data: {_token: admin.common.get_csrf_token_value(), client_id: client_id,
                 financial_year_id: financial_year_id, month_quarter_id: month_quarter_id, select_type: select_type},
             success: function (data) {

@@ -229,11 +229,11 @@ class DashboardController extends Controller {
 
                             if ($month != "") {
                                 if ($month > 3) {
-                                    $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
+                                    $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/01")));
                                     $return_time = 'M' . date('my', strtotime($return_date));
-                                    $start_return_month = date('m/1/Y', strtotime(date($year[0] . "/" . $month . "/1")));
+                                    $start_return_month = date('m/1/Y', strtotime(date($year[0] . "/" . $month . "/01")));
                                 } else {
-                                    $date = strtotime(date($year[0] . "/" . $month . "/t"));
+                                    $date = strtotime(date($year[0] . "/" . $month . "/01"));
                                     $new_date = strtotime('+ 1 year', $date);
                                     $return_date = date('m/t/Y', $new_date);
                                     $return_time = 'M' . date('my', strtotime($return_date));
@@ -272,8 +272,8 @@ class DashboardController extends Controller {
 
                             if ($month != "") {
                                 if ($month > 3) {
-                                    $start_return_month = date('m/1/Y', strtotime(date($year[0] . "/" . $start_month . "/1")));
-                                    $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
+                                    $start_return_month = date('m/d/Y', strtotime(date($year[0] . "/" . $start_month . "/01")));
+                                    $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/01")));
                                     $return_time = $ret_time . date('y', strtotime($return_date));
                                 } else {
                                     $date = strtotime(date($year[0] . "/" . $month . "/t"));
@@ -414,8 +414,10 @@ class DashboardController extends Controller {
                         if (empty($column_diff)) {
                             foreach ($importData_arr[0] as $key => $value) {
 
-                                if ($value != $header_array[$key]) {
-                                    $validation_array[] = 'Header does not match to given criteria it must be ' . '"' . $header_array[$key] . '"' . ' at column ' . $x . ' row 1.<br>';
+                                if ($key <= 77) {
+                                    if ($value == "" || $value != $header_array[$key]) {
+                                        $validation_array[] = 'Header does not match to given criteria it must be ' . '"' . $header_array[$key] . '"' . ' at column ' . $x . ' row 1.<br>';
+                                    }
                                 }
                                 $x++;
                             }
@@ -593,6 +595,7 @@ class DashboardController extends Controller {
                 }
             }
 
+
             $sales = DB::table('sales')->insert($sales_array_total);
             $sales_return = DB::table('sales_return')->insert($sales_return_total);
             if ($sales == TRUE && $sales_return == TRUE) {
@@ -676,65 +679,7 @@ class DashboardController extends Controller {
                     ->where('client_id', $client_id)
                     ->first();
 
-            if (!empty($month_quarter)) {
-                if (isset($month_quarter->return_option) && $month_quarter->return_option == 'M') {
-
-                    if (isset($month_quarter->year) && $month_quarter->year != "") {
-
-                        $year = explode('-', $month_quarter->year);
-
-                        $month = $month_quarter_id;
-
-                        if ($month != "") {
-                            if ($month > 3) {
-                                $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
-                                $return_time = 'M' . date('my', strtotime($return_date));
-                            } else {
-                                $date = strtotime(date($year[0] . "/" . $month . "/t"));
-                                $new_date = strtotime('+ 1 year', $date);
-                                $return_date = date('m/t/Y', $new_date);
-                                $return_time = 'M' . date('my', strtotime($return_date));
-                            }
-                        }
-                    }
-                } else if (isset($month_quarter->return_option) && $month_quarter->return_option == 'Q') {
-
-                    if (isset($month_quarter->year) && $month_quarter->year != "") {
-
-                        $year = explode('-', $month_quarter->year);
-
-                        $quarter = $month_quarter_id;
-
-                        $month = '';
-                        $ret_time = '';
-                        if ($quarter == 'Q1') {
-                            $ret_time = 'Q01';
-                            $month = '6';
-                        } else if ($quarter == 'Q2') {
-                            $ret_time = 'Q02';
-                            $month = '9';
-                        } else if ($quarter == 'Q3') {
-                            $ret_time = 'Q03';
-                            $month = '12';
-                        } else if ($quarter == 'Q4') {
-                            $ret_time = 'Q04';
-                            $month = '3';
-                        }
-
-                        if ($month != "") {
-                            if ($month > 3) {
-                                $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
-                                $return_time = $ret_time . date('y', strtotime($return_date));
-                            } else {
-                                $date = strtotime(date($year[0] . "/" . $month . "/t"));
-                                $new_date = strtotime('+ 1 year', $date);
-                                $return_date = date('m/t/Y', $new_date);
-                                $return_time = $ret_time . date('y', strtotime($return_date));
-                            }
-                        }
-                    }
-                }
-            }
+            $return_time = (new \App\Helper\CommonHelper)->convert_time($month_quarter, $month_quarter_id);
         }
 
 
@@ -864,65 +809,7 @@ class DashboardController extends Controller {
                     ->where('client_id', $client_id)
                     ->first();
 
-            if (!empty($month_quarter)) {
-                if (isset($month_quarter->return_option) && $month_quarter->return_option == 'M') {
-
-                    if (isset($month_quarter->year) && $month_quarter->year != "") {
-
-                        $year = explode('-', $month_quarter->year);
-
-                        $month = $month_quarter_id;
-
-                        if ($month != "") {
-                            if ($month > 3) {
-                                $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
-                                $return_time = 'M' . date('my', strtotime($return_date));
-                            } else {
-                                $date = strtotime(date($year[0] . "/" . $month . "/t"));
-                                $new_date = strtotime('+ 1 year', $date);
-                                $return_date = date('m/t/Y', $new_date);
-                                $return_time = 'M' . date('my', strtotime($return_date));
-                            }
-                        }
-                    }
-                } else if (isset($month_quarter->return_option) && $month_quarter->return_option == 'Q') {
-
-                    if (isset($month_quarter->year) && $month_quarter->year != "") {
-
-                        $year = explode('-', $month_quarter->year);
-
-                        $quarter = $month_quarter_id;
-
-                        $month = '';
-                        $ret_time = '';
-                        if ($quarter == 'Q1') {
-                            $ret_time = 'Q01';
-                            $month = '6';
-                        } else if ($quarter == 'Q2') {
-                            $ret_time = 'Q02';
-                            $month = '9';
-                        } else if ($quarter == 'Q3') {
-                            $ret_time = 'Q03';
-                            $month = '12';
-                        } else if ($quarter == 'Q4') {
-                            $ret_time = 'Q04';
-                            $month = '3';
-                        }
-
-                        if ($month != "") {
-                            if ($month > 3) {
-                                $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
-                                $return_time = $ret_time . date('y', strtotime($return_date));
-                            } else {
-                                $date = strtotime(date($year[0] . "/" . $month . "/t"));
-                                $new_date = strtotime('+ 1 year', $date);
-                                $return_date = date('m/t/Y', $new_date);
-                                $return_time = $ret_time . date('y', strtotime($return_date));
-                            }
-                        }
-                    }
-                }
-            }
+            $return_time = (new \App\Helper\CommonHelper)->convert_time($month_quarter, $month_quarter_id);
         }
 
 
@@ -1026,8 +913,12 @@ class DashboardController extends Controller {
         $client_id = Session::get('client_id');
         $financial_year_id = Session::get('financial_year_id');
         $month_quarter_id = Session::get('month_quarter_id');
-        $select_type = Session::get('select_type');
+        $type = Session::get('select_type');
 
+        $select_type = (isset($type) && $type != "") ? $type : 0;
+
+
+        $return_time = '';
         if ($client_id != '' && $financial_year_id != '' && $month_quarter_id != '') {
 
             $month_quarter = DB::table('return_period')->select('*')
@@ -1035,151 +926,118 @@ class DashboardController extends Controller {
                     ->where('client_id', $client_id)
                     ->first();
 
-
-            $return_time = '';
-            if (!empty($month_quarter)) {
-                if (isset($month_quarter->return_option) && $month_quarter->return_option == 'M') {
-
-                    if (isset($month_quarter->year) && $month_quarter->year != "") {
-
-                        $year = explode('-', $month_quarter->year);
-
-                        $month = $month_quarter_id;
-
-
-                        if ($month != "") {
-
-                            if ($month > 3) {
-                                $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
-                                $return_time = 'M' . date('my', strtotime($return_date));
-                            } else {
-                                $date = strtotime(date($year[0] . "/" . $month . "/t"));
-                                $new_date = strtotime('+ 1 year', $date);
-                                $return_date = date('m/t/Y', $new_date);
-                                $return_time = 'M' . date('my', strtotime($return_date));
-                            }
-                        }
-                    }
-                } else if (isset($month_quarter->return_option) && $month_quarter->return_option == 'Q') {
-
-                    if (isset($month_quarter->year) && $month_quarter->year != "") {
-
-                        $year = explode('-', $month_quarter->year);
-
-                        $quarter = $month_quarter_id;
-
-                        $month = '';
-                        if ($quarter == 'Q1') {
-                            $ret_time = 'Q01';
-                            $month = '6';
-                        } else if ($quarter == 'Q2') {
-                            $ret_time = 'Q02';
-                            $month = '9';
-                        } else if ($quarter == 'Q3') {
-                            $ret_time = 'Q03';
-                            $month = '12';
-                        } else if ($quarter == 'Q4') {
-                            $ret_time = 'Q04';
-                            $month = '3';
-                        }
-
-                        if ($month != "") {
-                            if ($month > 3) {
-                                $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
-                                $return_time = $ret_time . date('y', strtotime($return_date));
-                            } else {
-                                $date = strtotime(date($year[0] . "/" . $month . "/t"));
-                                $new_date = strtotime('+ 1 year', $date);
-                                $return_date = date('m/t/Y', $new_date);
-                                $return_time = $ret_time . date('y', strtotime($return_date));
-                            }
-                        }
-                    }
-                }
-            }
-
-            //This is for order 
-            $columns = array(
-                0. => 'st.state_code_name',
-                1 => 's.gst_rate',
-                2 => 'total_taxable_amount',
-                3 => 'total_igst',
-                4 => 'total_cgst',
-                5 => 'total_sgst',
-                6 => 'total',
-            );
+            $return_time = (new \App\Helper\CommonHelper)->convert_time($month_quarter, $month_quarter_id);
+        }
+        //This is for order 
+        $columns = array(
+            0. => 'main.place_of_supply',
+            1 => 'main.gst_rate',
+            2 => 'main.total_amount',
+            3 => 'main.igst',
+            4 => 'main.cgst',
+            5 => 'main.sgst',
+            6 => 'total',
+        );
 
 
-            $totalData_count = DB::table('sales')
-                            ->select('*')
-                            ->where('client_id', $client_id)
-                            ->where('return_time', $return_time)
-                            ->where('type', $select_type)
-                            ->whereIn('plateform', [1, 3, 4, 5])
-                            ->groupBy('place_of_supply', 'gst_rate')->get();
+        $totalData_count = DB::table('sales')
+                        ->select('*')
+                        ->where('client_id', $client_id)
+                        ->where('return_time', $return_time)
+                        ->where('type', $select_type)
+                        ->whereIn('plateform', [1, 3, 4, 5])
+                        ->groupBy('place_of_supply', 'gst_rate')->get();
 
-            $select_query = DB::table('sales as s')
-                    ->leftJoin('state_code as st', 'st.id', '=', 's.place_of_supply')
-                    ->where('s.client_id', $client_id)
-                    ->where('s.return_time', $return_time)
-                    ->where('s.type', $select_type)
-                    ->whereIn('s.plateform', [1, 3, 4, 5])
-                    ->selectRaw("st.state_code_name as place_of_supply,s.gst_rate,SUM(taxable_amount) as total_taxable_amount, SUM(igst) as total_igst, SUM(cgst) as total_cgst, SUM(sgst) as total_sgst")
-                    ->groupBy('s.place_of_supply', 's.gst_rate');
+        $select_query = 'SELECT 
+                            st.state_code_name as place_of_supply, main.gst_rate, 
+                            SUM(main.total_amount - IFNULL(sub.total_amount,0)) as total_taxable_amount,
+                            SUM(main.igst - IFNULL(sub.igst,0)) as total_igst,
+                            SUM(main.cgst - IFNULL(sub.cgst,0)) as total_cgst,
+                            SUM(main.sgst - IFNULL(sub.sgst,0)) as total_sgst
+                            FROM 
+                            (SELECT SUM(taxable_amount) as total_amount,place_of_supply, gst_rate,return_time,SUM(igst) as igst,SUM(cgst) as cgst,SUM(sgst) as sgst FROM sales where plateform in (1, 3, 4, 5) ';
 
-            if (isset($requestData['search']['value']) && $requestData['search']['value'] != '') {
-                $select_query->where("st.state_code_name", "like", '%' . $requestData['search']['value'] . '%')
-                        ->oRwhere("s.gst_rate", "like", '%' . $requestData['search']['value'] . '%');
-//                        ->oRwhere("total_igst", "like", '%' . $requestData['search']['value'] . '%')
-//                        ->oRwhere("total_cgst", "like", '%' . $requestData['search']['value'] . '%')
-//                        ->oRwhere("total_sgst", "like", '%' . $requestData['search']['value'] . '%');
-            }
+        if (isset($client_id) && $client_id != "") {
+            $select_query .= ' AND client_id = ' . $client_id;
+        }
 
-            if (isset($requestData['order'][0]['column']) && $requestData['order'][0]['column'] != '' && isset($requestData['order'][0]['dir']) && $requestData['order'][0]['dir'] != '') {
-                $order_by = $columns[$requestData['order'][0]['column']];
-                $select_query->orderBy($order_by, $requestData['order'][0]['dir']);
-            } else {
-                $select_query->orderBy("place_of_supply", "ASC");
-            }
+        if (isset($return_time) && $return_time != "") {
+            $select_query .= ' AND return_time = "' . $return_time . '"';
+        }
 
-            //This is for pagination
-            if (isset($requestData['start']) && $requestData['start'] != '' && isset($requestData['length']) && $requestData['length'] != '') {
-                $select_query->offset($requestData['start']);
-                $select_query->limit($requestData['length']);
-            }
+        if (isset($select_type) && $select_type != "") {
+            $select_query .= ' AND type = ' . $select_type;
+        }
 
-            $totalData = count($totalData_count);
+        $select_query .= ' GROUP BY place_of_supply, gst_rate, return_time) as main';
+        $select_query .= ' LEFT JOIN (SELECT SUM(`taxable_amount`) as total_amount,place_of_supply, gst_rate,return_time,SUM(igst) as igst,SUM(cgst) as cgst,SUM(sgst) as sgst FROM sales_return where plateform in (1, 3, 4, 5) ';
 
-            $sales_list = $select_query->get()->toArray();
+        if (isset($client_id) && $client_id != "") {
+            $select_query .= ' AND client_id = ' . $client_id;
+        }
 
-            $data = array();
-            foreach ($sales_list as $row) {
+        if (isset($return_time) && $return_time != "") {
+            $select_query .= ' AND return_time = "' . $return_time . '"';
+        }
 
-                $arr = explode('.', $row->gst_rate);
+        if (isset($select_type) && $select_type != "") {
+            $select_query .= ' AND type = ' . $select_type;
+        }
 
-                if (!empty($arr)) {
-                    if (isset($arr[0]) && $arr[0] > 0) {
-                        $gst_rate = $arr[0];
-                    } else {
-                        $gst_rate = isset($arr[1]) ? $arr[1] : "";
-                    }
-                } else {
-                    $gst_rate = $row->gst_rate;
-                }
+        $select_query .= ' GROUP BY place_of_supply, gst_rate,return_time) as sub ON sub.place_of_supply = main.place_of_supply 
+                                AND sub.gst_rate = main.gst_rate AND sub.return_time = main.return_time
+                                left join `state_code` as `st` on `st`.`id` = `main`.`place_of_supply` 
+                                GROUP by main.place_of_supply, main.gst_rate';
 
-                $temp['place_of_supply'] = $row->place_of_supply;
-                $temp['gst_rate'] = $gst_rate . " %";
-                $temp['total_taxable_amount'] = number_format($row->total_taxable_amount, 2);
-                $temp['total_igst'] = number_format($row->total_igst, 2);
-                $temp['total_cgst'] = number_format($row->total_cgst, 2);
-                $temp['total_sgst'] = number_format($row->total_sgst, 2);
-                $temp['total'] = number_format($row->total_taxable_amount + $row->total_igst + $row->total_cgst + $row->total_sgst, 2);
 
-                $data[] = $temp;
-            }
+        if (isset($requestData['search']['value']) && $requestData['search']['value'] != '') {
+            $select_query .= " AND (st.state_code_name LIKE '%" . $requestData['search']['value'] . "%' "
+                    . "OR main.total_amount LIKE '%" . $requestData['search']['value'] . "%' "
+                    . "OR main.igst LIKE '%" . $requestData['search']['value'] . "%' "
+                    . "OR main.cgst LIKE '%" . $requestData['search']['value'] . "%' "
+                    . "OR main.sgst LIKE '%" . $requestData['search']['value'] . "%')";
+        }
+
+        if (isset($requestData['order'][0]['column']) && $requestData['order'][0]['column'] != '' && isset($requestData['order'][0]['dir']) && $requestData['order'][0]['dir'] != '') {
+            $order_by = $columns[$requestData['order'][0]['column']];
+            $select_query .= " ORDER BY " . $order_by . " " . $requestData['order'][0]['dir'];
         } else {
-            $totalData = 0;
-            $data = array();
+            $select_query .= " ORDER BY st.state_code_name ASC";
+        }
+
+        //This is for pagination
+        if (isset($requestData['start']) && $requestData['start'] != '' && isset($requestData['length']) && $requestData['length'] != '') {
+            $select_query .= " limit " . $requestData['start'] . "," . $requestData['length'];
+        }
+
+        $totalData = count($totalData_count);
+
+        $sales_list = DB::select($select_query);
+
+        $data = array();
+        foreach ($sales_list as $row) {
+
+            $arr = explode('.', $row->gst_rate);
+
+            if (!empty($arr)) {
+                if (isset($arr[0]) && $arr[0] > 0) {
+                    $gst_rate = $arr[0];
+                } else {
+                    $gst_rate = isset($arr[1]) ? $arr[1] : "";
+                }
+            } else {
+                $gst_rate = $row->gst_rate;
+            }
+
+            $temp['place_of_supply'] = $row->place_of_supply;
+            $temp['gst_rate'] = $gst_rate . " %";
+            $temp['total_taxable_amount'] = number_format($row->total_taxable_amount, 2);
+            $temp['total_igst'] = number_format($row->total_igst, 2);
+            $temp['total_cgst'] = number_format($row->total_cgst, 2);
+            $temp['total_sgst'] = number_format($row->total_sgst, 2);
+            $temp['total'] = number_format($row->total_taxable_amount + $row->total_igst + $row->total_cgst + $row->total_sgst, 2);
+
+            $data[] = $temp;
         }
 
         $json_data = array(
@@ -1192,179 +1050,182 @@ class DashboardController extends Controller {
         exit(0);
     }
 
-    public function reporting_sales_return_data(Request $request) {
-
-        $requestData = $_REQUEST;
-
-        $platform_id = Session::get('platform_id');
-        $client_id = Session::get('client_id');
-        $financial_year_id = Session::get('financial_year_id');
-        $month_quarter_id = Session::get('month_quarter_id');
-        $select_type = Session::get('select_type');
-
-        if ($client_id != '' && $financial_year_id != '' && $month_quarter_id != '') {
-
-            $month_quarter = DB::table('return_period')->select('*')
-                    ->where('id', $financial_year_id)
-                    ->where('client_id', $client_id)
-                    ->first();
-
-            $return_time = '';
-            if (!empty($month_quarter)) {
-                if (isset($month_quarter->return_option) && $month_quarter->return_option == 'M') {
-
-                    if (isset($month_quarter->year) && $month_quarter->year != "") {
-
-                        $year = explode('-', $month_quarter->year);
-
-                        $month = $month_quarter_id;
-
-                        if ($month != "") {
-                            if ($month > 3) {
-                                $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
-                                $return_time = 'M' . date('my', strtotime($return_date));
-                            } else {
-                                $date = strtotime(date($year[0] . "/" . $month . "/t"));
-                                $new_date = strtotime('+ 1 year', $date);
-                                $return_date = date('m/t/Y', $new_date);
-                                $return_time = 'M' . date('my', strtotime($return_date));
-                            }
-                        }
-                    }
-                } else if (isset($month_quarter->return_option) && $month_quarter->return_option == 'Q') {
-
-                    if (isset($month_quarter->year) && $month_quarter->year != "") {
-
-                        $year = explode('-', $month_quarter->year);
-
-                        $quarter = $month_quarter_id;
-
-                        if ($quarter == 'Q1') {
-                            $ret_time = 'Q01';
-                            $month = '6';
-                        } else if ($quarter == 'Q2') {
-                            $ret_time = 'Q02';
-                            $month = '9';
-                        } else if ($quarter == 'Q3') {
-                            $ret_time = 'Q03';
-                            $month = '12';
-                        } else if ($quarter == 'Q4') {
-                            $ret_time = 'Q04';
-                            $month = '3';
-                        }
-
-                        if ($month != "") {
-                            if ($month > 3) {
-                                $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
-                                $return_time = $ret_time . date('y', strtotime($return_date));
-                            } else {
-                                $date = strtotime(date($year[0] . "/" . $month . "/t"));
-                                $new_date = strtotime('+ 1 year', $date);
-                                $return_date = date('m/t/Y', $new_date);
-                                $return_time = $ret_time . date('y', strtotime($return_date));
-                            }
-                        }
-                    }
-                }
-            }
-
-            //This is for order 
-            $columns = array(
-                0. => 'st.state_code_name',
-                1 => 's.gst_rate',
-                2 => 'total_taxable_amount',
-                3 => 'total_igst',
-                4 => 'total_cgst',
-                5 => 'total_sgst',
-                6 => 'total',
-            );
-
-
-            $totalData_count = DB::table('sales_return')
-                            ->select('*')
-                            ->where('client_id', $client_id)
-                            ->where('return_time', $return_time)
-                            ->where('type', $select_type)
-                            ->whereIn('plateform', [1, 3, 4, 5])
-                            ->groupBy('place_of_supply', 'gst_rate')->get();
-
-            $select_query = DB::table('sales_return as s')
-                    ->leftJoin('sales as sl', 'sl.place_of_supply', '=', 's.place_of_supply')
-                    ->leftJoin('state_code as st', 'st.id', '=', 's.place_of_supply')
-                    ->where('s.client_id', $client_id)
-                    ->where('s.return_time', $return_time)
-                    ->where('s.type', $select_type)
-                    ->whereIn('s.plateform', [1, 3, 4, 5])
-                    ->selectRaw("st.state_code_name as place_of_supply,s.gst_rate,"
-                            . "((s.taxable_amount) - (sl.taxable_amount)) as total_taxable_amount, "
-                            . "((s.igst) - (sl.igst)) as total_igst, "
-                            . "((s.cgst) - (sl.cgst)) as total_cgst, "
-                            . "((s.sgst) - (sl.sgst)) as total_sgst")
-                    ->groupBy('s.place_of_supply', 's.gst_rate');
-
-            if (isset($requestData['search']['value']) && $requestData['search']['value'] != '') {
-                $select_query->where("st.state_code_name", "like", '%' . $requestData['search']['value'] . '%')
-                        ->oRwhere("s.gst_rate", "like", '%' . $requestData['search']['value'] . '%');
-//                        ->oRwhere("total_igst", "like", '%' . $requestData['search']['value'] . '%')
-//                        ->oRwhere("total_cgst", "like", '%' . $requestData['search']['value'] . '%')
-//                        ->oRwhere("total_sgst", "like", '%' . $requestData['search']['value'] . '%');
-            }
-
-            if (isset($requestData['order'][0]['column']) && $requestData['order'][0]['column'] != '' && isset($requestData['order'][0]['dir']) && $requestData['order'][0]['dir'] != '') {
-                $order_by = $columns[$requestData['order'][0]['column']];
-                $select_query->orderBy($order_by, $requestData['order'][0]['dir']);
-            } else {
-                $select_query->orderBy("s.place_of_supply", "ASC");
-            }
-
-            //This is for pagination
-            if (isset($requestData['start']) && $requestData['start'] != '' && isset($requestData['length']) && $requestData['length'] != '') {
-                $select_query->offset($requestData['start']);
-                $select_query->limit($requestData['length']);
-            }
-
-            $totalData = count($totalData_count);
-
-            $sales_list = $select_query->get()->toArray();
-
-            $data = array();
-            foreach ($sales_list as $row) {
-
-                $arr = explode('.', $row->gst_rate);
-
-                if (!empty($arr)) {
-                    if (isset($arr[0]) && $arr[0] > 0) {
-                        $gst_rate = $arr[0];
-                    } else {
-                        $gst_rate = isset($arr[1]) ? $arr[1] : "";
-                    }
-                } else {
-                    $gst_rate = $row->gst_rate;
-                }
-
-                $temp['place_of_supply'] = $row->place_of_supply;
-                $temp['gst_rate'] = $gst_rate . " %";
-                $temp['total_taxable_amount'] = number_format($row->total_taxable_amount, 2);
-                $temp['total_igst'] = number_format($row->total_igst, 2);
-                $temp['total_cgst'] = number_format($row->total_cgst, 2);
-                $temp['total_sgst'] = number_format($row->total_sgst, 2);
-                $temp['total'] = number_format($row->total_taxable_amount + $row->total_igst + $row->total_cgst + $row->total_sgst, 2);
-
-                $data[] = $temp;
-            }
-        } else {
-            $totalData = 0;
-            $data = array();
-        }
-
-        $json_data = array(
-            "draw" => intval($requestData['draw']),
-            "recordsTotal" => intval($totalData),
-            "recordsFiltered" => intval($totalData),
-            "data" => $data
-        );
-        echo json_encode($json_data);
-        exit(0);
+    public function tablelist() {
+        return view('Admin.Dashboard.table_list');
     }
 
+//    public function reporting_sales_return_data(Request $request) {
+//
+//        $requestData = $_REQUEST;
+//
+//        $platform_id = Session::get('platform_id');
+//        $client_id = Session::get('client_id');
+//        $financial_year_id = Session::get('financial_year_id');
+//        $month_quarter_id = Session::get('month_quarter_id');
+//        $select_type = Session::get('select_type');
+//
+//        if ($client_id != '' && $financial_year_id != '' && $month_quarter_id != '') {
+//
+//            $month_quarter = DB::table('return_period')->select('*')
+//                    ->where('id', $financial_year_id)
+//                    ->where('client_id', $client_id)
+//                    ->first();
+//
+//            $return_time = '';
+//            if (!empty($month_quarter)) {
+//                if (isset($month_quarter->return_option) && $month_quarter->return_option == 'M') {
+//
+//                    if (isset($month_quarter->year) && $month_quarter->year != "") {
+//
+//                        $year = explode('-', $month_quarter->year);
+//
+//                        $month = $month_quarter_id;
+//
+//                        if ($month != "") {
+//                            if ($month > 3) {
+//                                $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
+//                                $return_time = 'M' . date('my', strtotime($return_date));
+//                            } else {
+//                                $date = strtotime(date($year[0] . "/" . $month . "/t"));
+//                                $new_date = strtotime('+ 1 year', $date);
+//                                $return_date = date('m/t/Y', $new_date);
+//                                $return_time = 'M' . date('my', strtotime($return_date));
+//                            }
+//                        }
+//                    }
+//                } else if (isset($month_quarter->return_option) && $month_quarter->return_option == 'Q') {
+//
+//                    if (isset($month_quarter->year) && $month_quarter->year != "") {
+//
+//                        $year = explode('-', $month_quarter->year);
+//
+//                        $quarter = $month_quarter_id;
+//
+//                        if ($quarter == 'Q1') {
+//                            $ret_time = 'Q01';
+//                            $month = '6';
+//                        } else if ($quarter == 'Q2') {
+//                            $ret_time = 'Q02';
+//                            $month = '9';
+//                        } else if ($quarter == 'Q3') {
+//                            $ret_time = 'Q03';
+//                            $month = '12';
+//                        } else if ($quarter == 'Q4') {
+//                            $ret_time = 'Q04';
+//                            $month = '3';
+//                        }
+//
+//                        if ($month != "") {
+//                            if ($month > 3) {
+//                                $return_date = date('m/t/Y', strtotime(date($year[0] . "/" . $month . "/t")));
+//                                $return_time = $ret_time . date('y', strtotime($return_date));
+//                            } else {
+//                                $date = strtotime(date($year[0] . "/" . $month . "/t"));
+//                                $new_date = strtotime('+ 1 year', $date);
+//                                $return_date = date('m/t/Y', $new_date);
+//                                $return_time = $ret_time . date('y', strtotime($return_date));
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            //This is for order 
+//            $columns = array(
+//                0. => 'st.state_code_name',
+//                1 => 's.gst_rate',
+//                2 => 'total_taxable_amount',
+//                3 => 'total_igst',
+//                4 => 'total_cgst',
+//                5 => 'total_sgst',
+//                6 => 'total',
+//            );
+//
+//
+//            $totalData_count = DB::table('sales_return')
+//                            ->select('*')
+//                            ->where('client_id', $client_id)
+//                            ->where('return_time', $return_time)
+//                            ->where('type', $select_type)
+//                            ->whereIn('plateform', [1, 3, 4, 5])
+//                            ->groupBy('place_of_supply', 'gst_rate')->get();
+//
+//            $select_query = DB::table('sales_return as s')
+//                    ->leftJoin('sales as sl', 'sl.place_of_supply', '=', 's.place_of_supply')
+//                    ->leftJoin('state_code as st', 'st.id', '=', 's.place_of_supply')
+//                    ->where('s.client_id', $client_id)
+//                    ->where('s.return_time', $return_time)
+//                    ->where('s.type', $select_type)
+//                    ->whereIn('s.plateform', [1, 3, 4, 5])
+//                    ->selectRaw("st.state_code_name as place_of_supply,s.gst_rate,"
+//                            . "((sl.taxable_amount) - (s.taxable_amount)) as total_taxable_amount, "
+//                            . "((sl.igst) - (s.igst)) as total_igst, "
+//                            . "((sl.cgst) - (s.cgst)) as total_cgst, "
+//                            . "((sl.sgst) - (s.sgst)) as total_sgst")
+//                    ->groupBy('s.place_of_supply', 's.gst_rate');
+//
+//            if (isset($requestData['search']['value']) && $requestData['search']['value'] != '') {
+//                $select_query->where("st.state_code_name", "like", '%' . $requestData['search']['value'] . '%')
+//                        ->oRwhere("s.gst_rate", "like", '%' . $requestData['search']['value'] . '%');
+////                        ->oRwhere("total_igst", "like", '%' . $requestData['search']['value'] . '%')
+////                        ->oRwhere("total_cgst", "like", '%' . $requestData['search']['value'] . '%')
+////                        ->oRwhere("total_sgst", "like", '%' . $requestData['search']['value'] . '%');
+//            }
+//
+//            if (isset($requestData['order'][0]['column']) && $requestData['order'][0]['column'] != '' && isset($requestData['order'][0]['dir']) && $requestData['order'][0]['dir'] != '') {
+//                $order_by = $columns[$requestData['order'][0]['column']];
+//                $select_query->orderBy($order_by, $requestData['order'][0]['dir']);
+//            } else {
+//                $select_query->orderBy("s.place_of_supply", "ASC");
+//            }
+//
+//            //This is for pagination
+//            if (isset($requestData['start']) && $requestData['start'] != '' && isset($requestData['length']) && $requestData['length'] != '') {
+//                $select_query->offset($requestData['start']);
+//                $select_query->limit($requestData['length']);
+//            }
+//
+//            $totalData = count($totalData_count);
+//
+//            $sales_list = $select_query->get()->toArray();
+//
+//            $data = array();
+//            foreach ($sales_list as $row) {
+//
+//                $arr = explode('.', $row->gst_rate);
+//
+//                if (!empty($arr)) {
+//                    if (isset($arr[0]) && $arr[0] > 0) {
+//                        $gst_rate = $arr[0];
+//                    } else {
+//                        $gst_rate = isset($arr[1]) ? $arr[1] : "";
+//                    }
+//                } else {
+//                    $gst_rate = $row->gst_rate;
+//                }
+//
+//                $temp['place_of_supply'] = $row->place_of_supply;
+//                $temp['gst_rate'] = $gst_rate . " %";
+//                $temp['total_taxable_amount'] = number_format($row->total_taxable_amount, 2);
+//                $temp['total_igst'] = number_format($row->total_igst, 2);
+//                $temp['total_cgst'] = number_format($row->total_cgst, 2);
+//                $temp['total_sgst'] = number_format($row->total_sgst, 2);
+//                $temp['total'] = number_format($row->total_taxable_amount + $row->total_igst + $row->total_cgst + $row->total_sgst, 2);
+//
+//                $data[] = $temp;
+//            }
+//        } else {
+//            $totalData = 0;
+//            $data = array();
+//        }
+//
+//        $json_data = array(
+//            "draw" => intval($requestData['draw']),
+//            "recordsTotal" => intval($totalData),
+//            "recordsFiltered" => intval($totalData),
+//            "data" => $data
+//        );
+//        echo json_encode($json_data);
+//        exit(0);
+//    }
 }

@@ -18,7 +18,7 @@
                     <i class="kt-font-brand flaticon2-line-chart"></i>
                 </span>
                 <h3 class="kt-portlet__head-title">
-                    Sales Table
+                    Sales Report
                 </h3>
             </div>
 
@@ -66,26 +66,26 @@
     </div>
 
 
-    <div class="kt-portlet kt-portlet--mobile">
+<!--    <div class="kt-portlet kt-portlet--mobile">
         <div class="kt-portlet__head kt-portlet__head--lg">
             <div class="kt-portlet__head-label">
                 <span class="kt-portlet__head-icon">
                     <i class="kt-font-brand flaticon2-line-chart"></i>
                 </span>
                 <h3 class="kt-portlet__head-title">
-                    Sales Return Table
+                    Sales Return Report
                 </h3>
             </div>
         </div>
 
         <div class="kt-portlet__body">
-            <!--begin: Datatable -->
+            begin: Datatable 
             <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="row">
                     <div class="col-sm-12">
-                        <!--<table class="table table-bordered table-striped with-check sales-return-table table-hover" style="width: 100%;">-->
+                        <table class="table table-bordered table-striped with-check sales-return-table table-hover" style="width: 100%;">
                         <table class="table table-striped- table-bordered table-hover table-checkable reporting-sales-table dataTable no-footer dtr-inline" role="grid" aria-describedby="kt_table_1_info" style="width: 1187px;">
-                        <!--<table class="table table-bordered table-striped with-check reporting-sales-table table-hover" style="width: 100%;">-->
+                        <table class="table table-bordered table-striped with-check reporting-sales-table table-hover" style="width: 100%;">
                             <thead>
                             <th>Place of supply</th>
                             <th>Tax Rate(%)</th>
@@ -115,9 +115,9 @@
                 </div>
 
             </div>
-            <!--end: Datatable -->
+            end: Datatable 
         </div>
-    </div>
+    </div>-->
 
 
 

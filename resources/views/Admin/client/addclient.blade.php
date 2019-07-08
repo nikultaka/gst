@@ -6,7 +6,7 @@
             <!--modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Create new User</h4>
+                    <h4 class="modal-title">Create new Client</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
                 </div>
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="client_name" class="col-sm-3 control-label">Name</label>
+                            <label for="client_name" class="col-sm-3 control-label">Client Name</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="cl_name" id="cl_name" data-validation="required" />
                             </div>

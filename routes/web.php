@@ -53,11 +53,12 @@ Route::post('/month_quarter', 'Admin\DashboardController@month_quarter');
 Route::post('/upload_file', 'Admin\DashboardController@upload_file');
 
 Route::post('/platfrom_change', 'Admin\DashboardController@platfrom_change');
+Route::get('/tablelist', 'Admin\DashboardController@tablelist');
 
-Route::get('/tablelist', function() {
-
-    return view('Admin.Dashboard.table_list');
-});
+//Route::get('/tablelist', function() {
+//
+//    return view('Admin.Dashboard.table_list');
+//});
 Route::post('/sales_table', 'Admin\DashboardController@sales_table_data');
 Route::post('/sales_return_table', 'Admin\DashboardController@sales_return_table_data');
 
