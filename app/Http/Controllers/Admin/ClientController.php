@@ -27,7 +27,7 @@ class ClientController extends Controller {
         $data_result = array();
 
         $client_years = array();
-        $earliest_year = 2017;
+        $earliest_year = 2019;
         $latest_year = date('Y');
         $Month = 3;
         $years = array();
@@ -160,7 +160,7 @@ class ClientController extends Controller {
             }
         }
 
-        $earliest_year = 2017;
+        $earliest_year = 2019;
         $latest_year = date('Y');
         $Month = 3;
         $years = array();
