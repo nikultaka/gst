@@ -36,6 +36,7 @@ class AdminController extends Controller {
             $user_data = ([
                 'name' => $post['name'],
                 'email' => $post['email'],
+                'mobile_number' => $post['mobile_number'],
                 'password' => Hash::make($post['password']),
                 'role_id' => 1,
                 'status' => 1,
@@ -45,8 +46,18 @@ class AdminController extends Controller {
             $insert = DB::table('users')->insert($user_data);
 
             if ($insert) {
+                
+                $mail_data['name'] = $user_data['name'];
+                $mail_data['email'] = $user_data['email'];
+                
+                Mail::send('admin.signup_mail', $mail_data, function($message) use ($mail_data) {
+                    $message->to($mail_data['email'], 'Sign up')->subject
+                            ('Sign up');
+                    $message->from(USER_EMAIL, USER_NAME);
+                });
+                
                 $data['status'] = 1;
-                $data['msg'] = "Register successfully.";
+                $data['msg'] = "Sign up successfully.";
             } else {
                 $data['status'] = 0;
                 $data['msg'] = "Something went wrong try again.";
@@ -142,7 +153,7 @@ class AdminController extends Controller {
 
             if ($pass_update) {
                 $result['status'] = 1;
-                $result['msg'] = 'Password changed. click <a href="'.url('login').'" style="color:black;">here</a> for login';
+                $result['msg'] = 'Password changed. click <a href="'.url('login').'" style="color:#5d5876;">here</a> for login';
             } else {
                 $result['status'] = 0;
                 $result['msg'] = 'Something went wrong.';

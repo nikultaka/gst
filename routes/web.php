@@ -77,8 +77,9 @@ Route::post('/savesession', 'Admin\DashboardController@save_session');
 //     User Routes Start
 //    Route::post('/email_check', 'Admin\UserController@email_check');
     Route::get('/clients', 'Admin\ClientController@index');
+    Route::get('/clients/add_view', 'Admin\ClientController@add_client_view');
     Route::post('/clients/add', 'Admin\ClientController@add');
-    Route::post('/clients/edit', 'Admin\ClientController@edit');
+    Route::get('/clients/edit/{id}', 'Admin\ClientController@edit');
     Route::post('/clients/update', 'Admin\ClientController@update');
     Route::post('/clients/delete', 'Admin\ClientController@delete');
     Route::post('/clients/gettable', 'Admin\ClientController@client_data_table');

@@ -1,28 +1,29 @@
-@extends('Admin.layouts.login.main')
-@section('pageTitle','Change Password')
-@section('pageHeadTitle','Change Password')
+@extends('Admin.layouts.login_main')
 
 @section('content')
-<form id="change_form"  name="change_form" action="" method="post" onsubmit="return false;" >
-    {{ csrf_field() }}
-    <input type="hidden" name="id" id="id" value="{{$id}}">
-    <div class="form-group has-feedback">
-        <input type="password" name="password_confirmation" id="password" data-validation="length" data-validation-length="min6" class="form-control" placeholder="Password">
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+<div class="kt-login__signin">
+    <div class="kt-login__head">
+        <h3 class="kt-login__title">Change Password </h3>
     </div>
-    <div class="form-group has-feedback">
-        <input type="password" name="password" id="repassword" data-validation="confirmation" class="form-control" placeholder="Confirm password">
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-    </div>
-    <p id="msg"></p>
-    <div class="row">
-        <div class="col-xs-12">
-            <button type="submit" id="submit" name="submit" class="btn btn-primary btn-block btn-flat">Verify</button>
+    <form class="kt-form" id="change_form"  name="change_form" action="" method="post" onsubmit="return false;">
+        {{ csrf_field() }}
+        <input type="hidden" name="id" id="id" value="{{$id}}">
+        <div class="">
+            <input class="form-control" type="password" placeholder="Password" name="password_confirmation" id="password" data-validation="length" data-validation-length="min6" autocomplete="off">
         </div>
-    </div>
+        <div class="">
+            <input class="form-control" type="password" placeholder="Confirm password" name="password" id="password" data-validation="confirmation">
+        </div>
 
-</form>
+        <div class="kt-login__actions">
+            <p id="msg"></p>
+            <button type="submit" id="submit" name="submit" class="btn btn-brand btn-pill kt-login__btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
 @endsection
+
 @section('bottomscript')
 <script>
     $(document).ready(function () {
