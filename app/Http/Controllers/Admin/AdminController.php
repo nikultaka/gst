@@ -50,8 +50,8 @@ class AdminController extends Controller {
                 $mail_data['name'] = $user_data['name'];
                 $mail_data['email'] = $user_data['email'];
                 
-                Mail::send('admin.signup_mail', $mail_data, function($message) use ($mail_data) {
-                    $message->to($mail_data['email'], 'Sign up')->subject
+                Mail::send('Admin.signup_mail', $mail_data, function($message) use ($mail_data) {
+                    $message->to($mail_data['email'], $mail_data['name'])->subject
                             ('Sign up');
                     $message->from(USER_EMAIL, USER_NAME);
                 });
@@ -109,7 +109,7 @@ class AdminController extends Controller {
                 $data['name'] = $user->name;
                 $data['link'] = url('/forgot/change_password/' . $data['id']);
 
-                Mail::send('admin.mail', $data, function($message) use ($data) {
+                Mail::send('Admin.mail', $data, function($message) use ($data) {
                     $message->to($data['email'], 'Forgot Password')->subject
                             ('Reset password');
                     $message->from(USER_EMAIL, USER_NAME);
@@ -133,7 +133,7 @@ class AdminController extends Controller {
             $id_decode = base64_decode($id);
             $data['id'] = $id_decode;
 
-            return view('admin.change_password')->with($data);
+            return view('Admin.change_password')->with($data);
         }
     }
 

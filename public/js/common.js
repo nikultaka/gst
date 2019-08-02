@@ -50,6 +50,7 @@ admin.common = {
             data: {_token: admin.common.get_csrf_token_value(), platform_id: platform_id},
             success: function (result) {
                 $('.sidebar_platform[data-id=' + platform_id + ']').addClass('kt-menu__item--active');
+                window.location.reload();
             },
         });
 

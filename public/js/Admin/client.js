@@ -83,9 +83,11 @@ admin.client = {
                 var obj1 = {};
                 var inputvalues = $('#gstin').val();
 //                var gstinformat = new RegExp('^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$');
-                var gstinformat = new RegExp('\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}');
+//                var gstinformat = new RegExp('\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}');
+                var gstinformat = new RegExp('^([0]{1}[1-9]{1}|[1-2]{1}[0-9]{1}|[3]{1}[0-7]{1})([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$');
 
-                if (gstinformat.test(inputvalues)) {
+//                if (gstinformat.test(inputvalues)) {
+                if (inputvalues.match(gstinformat)) {
                     return true;
                 } else {
                     obj.element = $('#gstin');

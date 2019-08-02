@@ -238,7 +238,7 @@ class ClientController extends Controller {
 
         $select_query = DB::table('clients as c')
                 ->leftJoin('users as u', 'u.id', '=', 'c.user_id')
-//                ->where('u.role_id', '=', 0)
+                ->where('c.user_id', '=', Auth::user()->id)
                 ->where('u.status', '=', 1)
                 ->where('c.status', '=', 1);
 

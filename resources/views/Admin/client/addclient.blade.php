@@ -50,6 +50,19 @@
                                     <div class="kt-portlet__body">
                                         <div class="kt-section kt-section--first">
                                             <div class="kt-section__body">
+                                                
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">Client Name :</label>
+                                                    <div class="col-lg-6">
+                                                        <input type="text" class="form-control" name="cl_name" id="cl_name" data-validation="required,length" data-validation-length="max100" value="<?php echo isset($client->client_name) ? $client->client_name : ""; ?>"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">GSTIN :</label>
+                                                    <div class="col-lg-6">
+                                                        <input type="text" class="form-control" name="gstin" id="gstin" data-validation="required" value="<?php echo isset($client->gstin) ? $client->gstin : ""; ?>" onkeyup="this.value = this.value.toUpperCase();"/>
+                                                    </div>
+                                                </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Years :</label>
                                                     <div class="col-lg-6">
@@ -83,18 +96,6 @@
                                                         }
                                                         ?>
                                                         <input type="hidden" id="hidden-radio" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-lg-3 col-form-label">Client Name :</label>
-                                                    <div class="col-lg-6">
-                                                        <input type="text" class="form-control" name="cl_name" id="cl_name" data-validation="required,length" data-validation-length="max100" value="<?php echo isset($client->client_name) ? $client->client_name : ""; ?>"/>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-lg-3 col-form-label">GSTIN :</label>
-                                                    <div class="col-lg-6">
-                                                        <input type="text" class="form-control" name="gstin" id="gstin" data-validation="required" value="<?php echo isset($client->gstin) ? $client->gstin : ""; ?>" onkeyup="this.value = this.value.toUpperCase();"/>
                                                     </div>
                                                 </div>
                                             </div>
