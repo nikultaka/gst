@@ -494,6 +494,9 @@ class DashboardController extends Controller {
         }
 
         if (empty($validation_array)) {
+            
+            $rows_successful = 0;
+            $rows_ignored = 0;
 
             $all_states_codes = DB::table('state')->select('*')->get()->toArray();
 
