@@ -35,10 +35,10 @@ class ClientController extends Controller {
 
             if (date("m") <= $Month) {
                 if ($year < date("Y")) {
-                    $years[] = date("y", strtotime('1-1-' . $year)) . '-' . date("Y", strtotime('1-1-' . $year . '+1 year'));
+                    $years[] = date("Y", strtotime('1-1-' . $year)) . '-' . date("y", strtotime('1-1-' . $year . '+1 year'));
                 }
             } else {
-                $years[] = date("y", strtotime('1-1-' . $year)) . '-' . date("Y", strtotime('1-1-' . $year . '+1 year'));
+                $years[] = date("Y", strtotime('1-1-' . $year)) . '-' . date("y", strtotime('1-1-' . $year . '+1 year'));
             }
         }
 
@@ -153,7 +153,7 @@ class ClientController extends Controller {
                             ->get()->toArray();
         }
 
-
+        $client_years = array();
         if (!empty($return_period)) {
             foreach ($return_period as $key => $value) {
                 $client_years[] = $value->year . '/' . $value->return_option;
@@ -168,10 +168,10 @@ class ClientController extends Controller {
 
             if (date("m") <= $Month) {
                 if ($year < date("Y")) {
-                    $years[] = date("y", strtotime('1-1-' . $year)) . '-' . date("Y", strtotime('1-1-' . $year . '+1 year'));
+                    $years[] = date("Y", strtotime('1-1-' . $year)) . '-' . date("y", strtotime('1-1-' . $year . '+1 year'));
                 }
             } else {
-                $years[] = date("y", strtotime('1-1-' . $year)) . '-' . date("Y", strtotime('1-1-' . $year . '+1 year'));
+                $years[] = date("Y", strtotime('1-1-' . $year)) . '-' . date("y", strtotime('1-1-' . $year . '+1 year'));
             }
         }
 

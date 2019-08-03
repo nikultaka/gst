@@ -2,7 +2,7 @@ admin.client = {
     initialize: function ()
     {
         var this_class = this;
-
+        
         $('body').on('click', '.btnEdit_client', function () {
             var id = $(this).data('id');
             this_class.edit_row(id);
@@ -21,9 +21,9 @@ admin.client = {
             $('#frm_client')[0].reset();
             $('#client_id').val('');
         });
-        
-        $('input:radio').on('change',function(){
-            $(this).attr("checked","checked");
+
+        $('input:radio').on('change', function () {
+            $(this).attr("checked", "checked");
         });
 
     },
@@ -81,19 +81,28 @@ admin.client = {
                 var result_array = [];
                 var obj = {};
                 var obj1 = {};
-                var inputvalues = $('#gstin').val();
+                var gstin = $('#gstin').val();
 //                var gstinformat = new RegExp('^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$');
 //                var gstinformat = new RegExp('\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}');
-                var gstinformat = new RegExp('^([0]{1}[1-9]{1}|[1-2]{1}[0-9]{1}|[3]{1}[0-7]{1})([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$');
+//                var gstinformat = new RegExp('^([0]{1}[1-9]{1}|[1-2]{1}[0-9]{1}|[3]{1}[0-7]{1})([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$');
+//
+////                if (gstinformat.test(inputvalues)) {
+//                if (inputvalues.match(gstinformat)) {
+////                    return true;
+//                } else {
+//                    obj.element = $('#gstin');
+//                    obj.message = 'Please Enter Valid GSTIN Number';
+//                    result_array.push(obj);
+//                }
 
-//                if (gstinformat.test(inputvalues)) {
-                if (inputvalues.match(gstinformat)) {
-                    return true;
-                } else {
+                if (!admin.client.validGSTIN(gstin)) {
                     obj.element = $('#gstin');
                     obj.message = 'Please Enter Valid GSTIN Number';
                     result_array.push(obj);
+                }else{
+//                    alert('Right');
                 }
+                
                 //Make groups
                 var names = [];
                 $('input:radio').each(function () {
@@ -169,8 +178,61 @@ admin.client = {
         }
         else {
             return false;
+    }   },
+    /** GSTIN validation functions start here */
+    validGSTIN: function (gstin) {
+        var GSTINFORMAT_REGEX = "[0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9A-Za-z]{1}[Z]{1}[0-9a-zA-Z]{1}";
+        var isValidFormat = false;
+        if (admin.client.checkPattern(gstin, GSTINFORMAT_REGEX)) {
+            isValidFormat = admin.client.verifyCheckDigit(gstin);
         }
+        return isValidFormat;
+    },
+    verifyCheckDigit: function (gstin) {
+        var isCDValid = false;
+        var newGstninWCheckDigit = admin.client.getGSTINWithCheckDigit(gstin.substr(0, gstin.length - 1));
+        if (gstin.trim() == newGstninWCheckDigit) {
+            isCDValid = true;
+        }
+        return isCDValid;
+    },
+    checkPattern: function (inputval, regxpatrn) {
+        var result = false;
+        var input = inputval.trim();
+        if (input.match(regxpatrn)) {
+            result = true;
+        }
+        return result;
+    },
+    getGSTINWithCheckDigit: function (gstinWOCheckDigit) {
+        var factor = 2;
+        var sum = 0;
+        var checkCodePoint = 0;
+        var cpChars = new Array();
+        var inputChars = new Array();
+        var GSTN_CODEPOINT_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        if (gstinWOCheckDigit == null) {
+            console.log("GSTIN supplied for checkdigit calculation is null.");
+        }
+        cpChars = GSTN_CODEPOINT_CHARS.split('');
+        inputChars = gstinWOCheckDigit.trim().toUpperCase().split('');
+        var mod = cpChars.length;
+        for (var i = inputChars.length - 1; i >= 0; i--) {
+            var codePoint = -1;
+            for (var j = 0; j < cpChars.length; j++) {
+                if (cpChars[j] == inputChars[i]) {
+                    codePoint = j;
+                }
+            }
 
-
+            var digit = factor * codePoint;
+            factor = (factor == 2) ? 1 : 2;
+            var calc1 = parseInt(digit) / parseInt(mod);
+            var calc2 = parseInt(digit) % parseInt(mod);
+            digit = parseInt(calc1) + parseInt(calc2);
+            sum += digit;
+        }
+        checkCodePoint = (mod - (sum % mod)) % mod;
+        return gstinWOCheckDigit + cpChars[checkCodePoint];
     },
 };

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Session;
 use DateTime;
+use Auth;
 
 class DashboardController extends Controller {
 
@@ -91,6 +92,7 @@ class DashboardController extends Controller {
 
             $query = DB::table('clients')->select('*');
             $query->where('client_name', 'like', '%' . $client_name . '%');
+            $query->where('user_id', Auth::user()->id);
             $query->orderBy("client_name", "ASC");
             $clients = $query->get()->toArray();
 
