@@ -14,7 +14,14 @@
                     <i class="kt-font-brand flaticon2-line-chart"></i>
                 </span>
                 <h3 class="kt-portlet__head-title">
-                    Add Client
+                    
+                    <?php 
+                        if(isset($client->id) && $client->id != ""){
+                            echo "Edit Client";
+                        } else {
+                            echo "Add Client";
+                        }
+                    ?>
                 </h3>
             </div>
             <div class="kt-portlet__head-toolbar">
@@ -38,7 +45,12 @@
                                 <div class="kt-portlet__head">
                                     <div class="kt-portlet__head-label">
                                         <h3 class="kt-portlet__head-title">
-                                            Add Client Form
+                                            <?php 
+                                            if(isset($client->id) && $client->id != ""){
+                                                echo "Edit Client Form";
+                                            } else {
+                                                echo "Add Client Form";
+                                            }?>
                                         </h3>
                                     </div>
                                 </div>

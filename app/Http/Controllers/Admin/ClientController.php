@@ -80,17 +80,25 @@ class ClientController extends Controller {
                     if (array_key_exists("years_" . $i, $post)) {
 
                         $year_array = explode('/', $post["years_" . $i]);
+                        $year = isset($year_array[0]) ? $year_array[0] : "";
 
                         $return_data['client_id'] = $id;
                         $return_data['year'] = isset($year_array[0]) ? $year_array[0] : "";
                         $return_data['return_option'] = isset($year_array[1]) ? $year_array[1] : "";
 
                         $client = DB::table('return_period')
-                                ->where($return_data)
+                                ->where('client_id',$id)
+                                ->where('year',$year)
                                 ->first();
+                        
 
                         if (empty($client)) {
                             $clientresult = DB::table('return_period')->insertGetId($return_data);
+                        } else {
+                            $return_option['return_option'] = isset($year_array[1]) ? $year_array[1] : "";
+                            $returnresult = DB::table('return_period')
+                                            ->where('id', $client->id)
+                                            ->update($return_option);
                         }
                         $i++;
                     }
@@ -99,10 +107,11 @@ class ClientController extends Controller {
                 if ($returnresult || $clientresult) {
                     $result['status'] = 1;
                     $result['msg'] = 'Client has been updated successfully.!';
-                } else {
-                    $result['status'] = 0;
-                    $result['msg'] = "Something went wrong try again.";
-                }
+                } 
+//                else {
+//                    $result['status'] = 0;
+//                    $result['msg'] = "Something went wrong try again.";
+//                }
             } else {
 
                 $insert_id = DB::table('clients')->insertGetId($data);

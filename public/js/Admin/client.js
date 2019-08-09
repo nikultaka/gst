@@ -23,6 +23,8 @@ admin.client = {
         });
 
         $('input:radio').on('change', function () {
+            var name = $(this).attr("name");
+            $('input[name="'+name+'"]').removeAttr('checked');
             $(this).attr("checked", "checked");
         });
 
@@ -63,6 +65,7 @@ admin.client = {
                     datatype: 'json',
                     success: function (data) {
                         var data = $.parseJSON(data);
+                        $('#msg_main').html('');
                         if (data.status == 1) {
                             $('#msg_main').css('color', 'green');
                             $('#msg_main').html(data.msg);
